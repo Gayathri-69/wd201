@@ -30,7 +30,7 @@ const todoList = () => {
       if (item.dueDate!== today) {
         output += ` ${item.dueDate}`
       }
-      output += "\n"
+      output +="\n"
     })
     return output
   }
