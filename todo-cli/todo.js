@@ -18,7 +18,6 @@ const todoList = () => {
   }
 
   const dueLater = () => {
-    
     return all.filter(item => item.dueDate > today )
   }
 
