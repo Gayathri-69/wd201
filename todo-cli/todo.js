@@ -22,18 +22,12 @@ const todoList = () => {
   }
 
   const toDisplayableList = (list) => {
-    let output = ""
-    list.forEach((item, index) => {
-      output += `[${item.completed ? 'x' : ' '}] ${item.title}`
-      if (item.dueDate!== today) {
-        output += ` ${item.dueDate}`
-      }
-      output +="\n"
-    })
-    return output
-  }
-  const formattedDate = (date) => {
-  return date.toISOString().split("T")[0]
+    return list.map((item, index) => {
+      const prefix = item.completed ? "[x]" : "[ ]"
+      const date = item.dueDate === new Date().toISOString().split("T")[0] ? "" : ` ${item.dueDate}`
+      return `${prefix} ${item.title}${date}`
+    }).join("\n")
+    
 }
 
   return {
