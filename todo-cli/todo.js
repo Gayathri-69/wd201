@@ -22,13 +22,15 @@ const todoList = () => {
   }
 
   const toDisplayableList = (list) => {
-    return list.map((item, index) => {
+    return list.map((item) => {
       const prefix = item.completed ? "[x]" : "[ ]"
       const date = item.dueDate === new Date().toISOString().split("T")[0] ? "" : ` ${item.dueDate}`
       return `${prefix} ${item.title}${date}`
     }).join("\n")
     
-}
+  }
+  
+
 
   return {
     all,
@@ -76,5 +78,4 @@ const dueLaterItems = todos.dueLater()
 const formattedDueLaterItems = todos.toDisplayableList(dueLaterItems)
 console.log(formattedDueLaterItems)
 console.log("\n")
-
 
