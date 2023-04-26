@@ -20,7 +20,7 @@ app.get("/",async (request,response)=>{
   }
 });
 app.get("/todos", async function (_request, response) {
-  console.log("Processing list of all Todos ...");
+  console.log("processing list of all todos ...");
   
   try{
     const todo = await Todo.findAll();
@@ -65,7 +65,7 @@ app.put("/todos/:id/markAsCompleted", async function (request, response) {
 });
 
 app.delete("/todos/:id", async function (request, response) {
-  console.log("We have to delete a Todo with ID: ", request.params.id);
+  console.log("We have to delete a todo with ID: ", request.params.id);
   
   try{
     const cd=await Todo.destroy({    
