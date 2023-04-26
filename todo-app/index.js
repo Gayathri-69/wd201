@@ -1,21 +1,5 @@
-// eslint-disable-next-line no-unused-vars
-const {connect}=require("./connectDB.js");
-const Todo =require("./Todomodel.js");
+const app = require('./app');
 
-const createTodo=async()=>{
-    try{
-        await connect();
-        const todo =await Todo.addTask({
-            title:"Second Item",
-            dueDate:new Date(),
-            completed: false,
-        });
-        console.log(`Created todo with ID:${todo.id}`);
-
-    }catch(error){
-        console.error(error);
-    }
-};
-(async ()=>{
-    await createTodo();
-})();
+app.listen(3000, () => {
+    console.log("Started express server at port 3000")
+})
