@@ -12,10 +12,18 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+
+    static addTodo({ title, dueDate }){
+      return this.create({ title: title, dueDate: dueDate, completed: false})
+    }
+
+    markAsCompleted() {
+      return this.update({ completed: true})
+    }
   }
   Todo.init({
     title: DataTypes.STRING,
-    durDate: DataTypes.DATEONLY,
+    duedate: DataTypes.DATEONLY,
     completed: DataTypes.BOOLEAN
   }, {
     sequelize,
