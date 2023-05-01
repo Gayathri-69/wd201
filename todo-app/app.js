@@ -1,29 +1,44 @@
+/* eslint-disable no-undef */
 const express = require("express");
-const app = express();
+const app = express(); // importing express value
 const { Todo } = require("./models");
-const bodypaser = require("body-parser");
-app.use(bodypaser.json());
+const bodyParser = require("body-parser");
+const path = require("path");// importing path value 
+app.use(bodyParser.json());
 
-app.get("/todos", async (request, response) => {
-  console.log("Todo items", response.body);
-  try {
-    const todo = await Todo.findAll();
-    return response.send(todo);
-    // return response.json(todo);
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
+app.set("view engine","ejs");//rendering your file to application
+app.use(express.static(path.join(__dirname,'public')));//to use particual location to render all static values 
+
+app.get("/",async (request,response)=>{
+  const allTodos = await Todo.getTodos();
+  if(request.accepts("html")){
+    response.render('index',{
+      allTodos,
+    });
+  }
+  else{
+      response.json({allTodos})
   }
 });
+app.get("/todos", async function (_request, response) {
+  console.log("Processing list of all Todos ...");
+  // FILL IN YOUR CODE HERE
+  try{
+    const todo = await Todo.findAll();
+    return response.send(todo);
+  }
+  catch(error){
+    console.log(error);
+    return response.status(422).json(error);   
+  }
+  // First, we have to query our PostgerSQL database using Sequelize to get list of all Todos.
+  // Then, we have to respond with all Todos, like:
+  // response.send(todos)
+});
 
-app.post("/todos", async (request, response) => {
-  console.log("creating a todo", request.body);
+app.get("/todos/:id", async function (request, response) {
   try {
-    const todo = await Todo.addTodo({
-      title: request.body.title,
-      dueDate: request.body.dueDate,
-      completed: false,
-    });
+    const todo = await Todo.findByPk(request.params.id);
     return response.json(todo);
   } catch (error) {
     console.log(error);
@@ -31,8 +46,17 @@ app.post("/todos", async (request, response) => {
   }
 });
 
-app.put("/todos/:id/markAsCompleted", async (request, response) => {
-  console.log("we have to update a todo with ID:", request.params.id);
+app.post("/todos", async function (request, response) {
+  try {
+    const todo = await Todo.addTodo(request.body);
+    return response.json(todo);
+  } catch (error) {
+    console.log(error);
+    return response.status(422).json(error);
+  }
+});
+
+app.put("/todos/:id/markAsCompleted", async function (request, response) {
   const todo = await Todo.findByPk(request.params.id);
   try {
     const updatedTodo = await todo.markAsCompleted();
@@ -42,21 +66,28 @@ app.put("/todos/:id/markAsCompleted", async (request, response) => {
     return response.status(422).json(error);
   }
 });
-// eslint-disable-line no-unused-vars
-app.delete("/todos/:id", async (request, response) => {
-  console.log("Delete a todo by ID: ", request.params.id);
-  try {
-    const deleted = await Todo.destroy({
-      where: {
-        id: request.params.id,
-      },
-    });
-    response.send(deleted > 0);
-    // return response.json(deleted);
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
 
+app.delete("/todos/:id", async function (request, response) {
+  console.log("We have to delete a Todo with ID: ", request.params.id);
+  // FILL IN YOUR CODE HERE
+  try{
+    const d=await Todo.destroy({    
+      where: {
+        id: request.params.id
+      }
+    });
+    response.send(d>0);
+  }
+  catch(error){
+    console.log(error);
+    return response.status(422).json(error);   
+  }
+  // First, we have to query our database to delete a Todo by ID.
+  // Then, we have to respond back with true/false based on whether the Todo was deleted or not.
+  // response.send(true)
+});
+app.get("/todos", async(request,response) =>{
+const todoItems= await Todo.gettodo();
+response.json(todoItems);
+})
 module.exports = app;
