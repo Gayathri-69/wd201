@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 const express = require("express");
+// eslint-disable-next-line no-unused-vars
+const Sequelize = require('sequelize');
 const app = express(); // importing express value
 const { Todo } = require("./models");
 const bodyParser = require("body-parser");
