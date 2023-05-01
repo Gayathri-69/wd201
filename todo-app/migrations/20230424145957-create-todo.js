@@ -12,7 +12,7 @@ module.exports = {
       title: {
         type: Sequelize.STRING
       },
-      durDate: {
+      dueDate: {
         type: Sequelize.DATEONLY
       },
       completed: {
