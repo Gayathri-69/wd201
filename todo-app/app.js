@@ -3,33 +3,31 @@ const express = require("express");
 const app = express(); // importing express value
 const { Todo } = require("./models");
 const bodyParser = require("body-parser");
-const path = require("path");// importing path value 
+const path = require("path"); // importing path value
 app.use(bodyParser.json());
 
-app.set("view engine","ejs");//rendering your file to application
-app.use(express.static(path.join(__dirname,'public')));//to use particual location to render all static values 
+app.set("view engine", "ejs"); //rendering your file to application
+app.use(express.static(path.join(__dirname, "public"))); //to use particual location to render all static values
 
-app.get("/",async (request,response)=>{
+app.get("/", async (request, response) => {
   const allTodos = await Todo.getTodos();
-  if(request.accepts("html")){
-    response.render('index',{
+  if (request.accepts("html")) {
+    response.render("index", {
       allTodos,
     });
-  }
-  else{
-      response.json({allTodos})
+  } else {
+    response.json({ allTodos });
   }
 });
 app.get("/todos", async function (_request, response) {
   console.log("Processing list of all Todos ...");
   // FILL IN YOUR CODE HERE
-  try{
+  try {
     const todo = await Todo.findAll();
     return response.send(todo);
-  }
-  catch(error){
+  } catch (error) {
     console.log(error);
-    return response.status(422).json(error);   
+    return response.status(422).json(error);
   }
   // First, we have to query our PostgerSQL database using Sequelize to get list of all Todos.
   // Then, we have to respond with all Todos, like:
@@ -70,24 +68,23 @@ app.put("/todos/:id/markAsCompleted", async function (request, response) {
 app.delete("/todos/:id", async function (request, response) {
   console.log("We have to delete a Todo with ID: ", request.params.id);
   // FILL IN YOUR CODE HERE
-  try{
-    const d=await Todo.destroy({    
+  try {
+    const cd = await Todo.destroy({
       where: {
-        id: request.params.id
-      }
+        id: request.params.id,
+      },
     });
-    response.send(d>0);
-  }
-  catch(error){
+    response.send(cd > 0);
+  } catch (error) {
     console.log(error);
-    return response.status(422).json(error);   
+    return response.status(422).json(error);
   }
   // First, we have to query our database to delete a Todo by ID.
   // Then, we have to respond back with true/false based on whether the Todo was deleted or not.
   // response.send(true)
 });
-app.get("/todos", async(request,response) =>{
-const todoItems= await Todo.gettodo();
-response.json(todoItems);
-})
+app.get("/todos", async (request, response) => {
+  const todoItems = await Todo.gettodo();
+  response.json(todoItems);
+});
 module.exports = app;
