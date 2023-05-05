@@ -1,16 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="stylesheet" href="./css/styles.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="./css/styles.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TodoList</title>
 </head>
+
 <body>
-    <%- include('header.ejs') %>
-    <%- include('todos.ejs') %>
-    <%- include('footer.ejs') %>
-  
+    <div class="grid grid-cols-6">
+        <div class="col-start-3 col-span-2">
+            <%- include('header.ejs') %>
+                <form action="">
+                    <div class="flex py-5 gap-2">
+                        <div class="flex-auto">
+                            <input class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm" type="text"
+                                placeholder="Enter Todo" required>
+                        </div>
+                        <div class="flex-auto">
+                            <input class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm leading-4"
+                                type="date">
+                        </div>
+                        <div class="flex-none">
+                            <button class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2"
+                                type="submit">Add</button>
+                        </div>
+                    </div>
+                </form>
+
+                <%- include('todos.ejs',{ "todotype" : "Overdue" , "id" : "count-overdue" , "todos" : overdueTodos }) %>
+
+                    <%- include('todos.ejs',{ "todotype" : "Due Today" , "id" : "count-due-today" , "todos" :
+                        dueTodayTodos }) %>
+
+                        <%- include('todos.ejs',{ "todotype" : "Due Later" , "id" : "count-due-later" , "todos" :
+                            dueLaterTodos }) %>
+        </div>
+    </div>
 </body>
+
 </html>
