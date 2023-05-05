@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -12,9 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-
-    static addTodo({ title, dueDate }){
-      return this.create({ title: title, dueDate: dueDate, completed: false})
+    static addTodo({ title, dueDate }) {
+      return this.create({ title: title, dueDate: dueDate, completed: false });
     }
 
     static getTodos() {
@@ -22,16 +19,52 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     markAsCompleted() {
-      return this.update({ completed: true})
+      return this.update({ completed: true });
     }
+
+    static getoverdueTodos() {
+      const date = new Date();
+      return this.findAll({
+        where: {
+          dueDate: {
+            [Op.lt]: date,
+          },
+        },
+      });
+    }
+    static getdueTodayTodos() {
+      const date = new Date();
+      return this.findAll({
+        where: {
+          dueDate: {
+            [Op.eq]: date,
+          },
+        },
+      });
+    }
+    static getdueLaterTodos() {
+      const date = new Date();
+      return this.findAll({
+        where: {
+          dueDate: {
+            [Op.gt]: date,
+          },
+        },
+      });
+    }
+
+
   }
-  Todo.init({
-    title: DataTypes.STRING,
-    dueDate: DataTypes.DATEONLY,
-    completed: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'Todo',
-  });
+  Todo.init(
+    {
+      title: DataTypes.STRING,
+      dueDate: DataTypes.DATEONLY,
+      completed: DataTypes.BOOLEAN,
+    },
+    {
+      sequelize,
+      modelName: "Todo",
+    }
+  );
   return Todo;
 };
