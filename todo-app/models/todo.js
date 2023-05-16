@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 "use strict";
 const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
@@ -18,8 +20,14 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll();
     }
 
-    markAsCompleted() {
-      return this.update({ completed: true });
+    static async getCompleted(){
+      return this.findAll({
+        where:{
+          completed:{
+            [Op.eq]: true,
+          }
+        }
+      })
     }
 
     static getoverdueTodos() {
@@ -28,6 +36,9 @@ module.exports = (sequelize, DataTypes) => {
         where: {
           dueDate: {
             [Op.lt]: date,
+          },
+          completed:{
+            [Op.eq]: false,
           },
         },
       });
@@ -39,6 +50,16 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.eq]: date,
           },
+          completed:{
+            [Op.eq]: false,
+          },
+        },
+      });
+    }
+    static async remove(id) {
+      return this.destroy({
+        where: {
+          id,
         },
       });
     }
@@ -49,11 +70,12 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.gt]: date,
           },
+          completed:{
+            [Op.eq]: false,
+          },
         },
       });
     }
-
-
   }
   Todo.init(
     {
