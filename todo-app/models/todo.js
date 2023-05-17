@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
     setCompletionStatus(completed) {
-      return this.update({ completed: completed });
+      return this.update({ completed: !completed });
     }
     static getTodos() {
       return this.findAll();
