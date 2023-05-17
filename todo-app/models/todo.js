@@ -22,47 +22,42 @@ module.exports = (sequelize, DataTypes) => {
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
     setCompletionStatus(completed) {
-      const r=completed;
+      let r = completed;
       return this.update({ completed: r });
     }
     static getTodos() {
       return this.findAll();
     }
 
-    static async getCompleted(){
+    static async getCompleted() {
       return this.findAll({
-        where:{
-          completed:{
-            [Op.eq]: true,
-          }
-          },
-          
+        where: {
+          completed: true,
+        },
       });
     }
 
     static getoverdueTodos() {
-      const date = new Date();
+      let date = new Date().toISOString().split("T")[0];
       return this.findAll({
         where: {
           dueDate: {
             [Op.lt]: date,
           },
-          completed:{
+          completed: {
             [Op.eq]: false,
           },
         },
       });
     }
     static getdueTodayTodos() {
-      const date = new Date();
+      let date = new Date().toISOString().split("T")[0];
       return this.findAll({
         where: {
           dueDate: {
             [Op.eq]: date,
           },
-          completed:{
-            [Op.eq]: false,
-          },
+          completed: false,
         },
       });
     }
@@ -74,15 +69,13 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
     static getdueLaterTodos() {
-      const date = new Date();
+      let date = new Date().toISOString().split("T")[0];
       return this.findAll({
         where: {
           dueDate: {
             [Op.gt]: date,
           },
-          completed:{
-            [Op.eq]: false,
-          },
+          completed: false,
         },
       });
     }
