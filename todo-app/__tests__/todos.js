@@ -49,7 +49,7 @@ describe("Todo test suite", function () {
     await agent.post("/todos").send({
       title: "complete homework",
       dueDate: new Date().toISOString(),
-      completed: true,
+      completed: false,
       _csrf: csrfToken,
     });
 
@@ -67,6 +67,7 @@ describe("Todo test suite", function () {
       .put(`/todos/${latestTodo.id}`)
       .send({
         _csrf: csrfToken,
+        completed: true,
       });
 
     const parsedUpdateResponse = JSON.parse(markCompletedResponse.text);
@@ -104,7 +105,7 @@ describe("Todo test suite", function () {
         completed: false,
       });
     const parsedUpdateResponse = JSON.parse(markIncompleteResponse.text);
-    expect(parsedUpdateResponse.completed).toBe(true);
+    expect(parsedUpdateResponse.completed).toBe(false);
   });
 
   test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
