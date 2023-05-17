@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 const express = require("express");
 // eslint-disable-next-line no-unused-vars
-var csrf =require("tiny-csrf");
+var csrf = require("tiny-csrf");
 const app = express();
 const { Todo } = require("./models");
 const bodypaser = require("body-parser");
@@ -11,7 +11,7 @@ app.use(bodypaser.json());
 const path = require("path");
 app.use(express.urlencoded({ extented: false }));
 app.use(cookieParser("shh! secret string"));
-app.use(csrf("123456789iamasecret987654321look",["POST","PUT","DELETE"]));
+app.use(csrf("123456789iamasecret987654321look", ["POST", "PUT", "DELETE"]));
 
 
 
@@ -38,8 +38,9 @@ app.get("/", async (request, response) => {
       csrfToken: request.csrfToken(),
     });
   } else {
-    response.json({ allTodos, overdueTodos, dueTodayTodos, dueLaterTodos,CompletedTodos,
-      csrfToken: request.csrfToken(),});
+    response.json({
+      allTodos, overdueTodos, dueTodayTodos, dueLaterTodos, CompletedTodos
+    });
   }
 });
 
@@ -61,7 +62,7 @@ app.post("/todos", async (request, response) => {
     await Todo.addTodo({
       title: request.body.title,
       dueDate: request.body.dueDate,
-      
+
     });
     return response.redirect("/");
   } catch (error) {
