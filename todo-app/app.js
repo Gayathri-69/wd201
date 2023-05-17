@@ -20,6 +20,7 @@ module.exports = {
 };
 //set EJS as view engine
 app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", async (request, response) => {
   const allTodos = await Todo.getTodos();
@@ -41,8 +42,6 @@ app.get("/", async (request, response) => {
       csrfToken: request.csrfToken(),});
   }
 });
-
-app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/todos", async (request, response) => {
   console.log("Todo items", response.body);
@@ -71,11 +70,11 @@ app.post("/todos", async (request, response) => {
   }
 });
 
-app.put("/todos/:id/markAsCompleted", async (request, response) => {
+app.put("/todos/:id", async (request, response) => {
   console.log("we have to update a todo with ID:", request.params.id);
   const todo = await Todo.findByPk(request.params.id);
   try {
-    const updatedTodo = await todo.markAsCompleted();
+    const updatedTodo = await todo.setCompletionStatus(request.body.completed);
     return response.json(updatedTodo);
   } catch (error) {
     console.log(error);
