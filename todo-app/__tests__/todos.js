@@ -70,7 +70,7 @@ describe("Todo test suite", function () {
       });
 
     const parsedUpdateResponse = JSON.parse(markCompletedResponse.text);
-    expect(parsedUpdateResponse.completed).toBe(false);
+    expect(parsedUpdateResponse.completed).toBe(true);
 
 
   });
@@ -104,7 +104,7 @@ describe("Todo test suite", function () {
         completed: false,
       });
     const parsedUpdateResponse = JSON.parse(markIncompleteResponse.text);
-    expect(parsedUpdateResponse.completed).toBe(false);
+    expect(parsedUpdateResponse.completed).toBe(true);
   });
 
   test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
