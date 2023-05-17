@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll({
         where:{
           completed:{
-            [Op.eq]: false,
+            [Op.eq]: true,
           }
           },
           
