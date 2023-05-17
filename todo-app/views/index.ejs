@@ -10,13 +10,13 @@
     <link href="./css/styles.css" rel="stylesheet">
     <script>
         var token = document
-    .querySelector('meta[name="csrf-token"]')
-    .getAttribute("content");
-            function updateTodo(id) {
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+        function updateTodo(id, completed) {
             fetch(`/todos/${id}`, {
                 method: "put",
                 headers: { "Content-Type": "application/json" },
-                body:JSON.stringify({
+                body: JSON.stringify({
                     _csrf: token,
                     completed: !completed
                 })
@@ -32,8 +32,9 @@
             fetch(`/todos/${id}`, {
                 method: "delete",
                 headers: { "Content-Type": "application/json" },
-                body:JSON.stringify({
-                    "_csrf": token})
+                body: JSON.stringify({
+                    "_csrf": token
+                })
             })
                 .then((res) => {
                     if (res.ok) {
@@ -51,7 +52,7 @@
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
                 <form action="/todos" method="post">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <div class="flex py-5 gap-2">
                         <div class="flex-auto">
                             <input class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm" type="text"
@@ -75,9 +76,9 @@
 
                         <%- include('todos.ejs',{ "todotype" : "Due Later" , "id" : "count-due-later" , "todos" :
                             dueLaterTodos }) %>
-                            
-                            <%- include('todos.ejs',{ "todotype" : "Completed Items" , "id"
-                                    : "count-completed-items" , "todos" : CompletedTodos }) %>
+
+                            <%- include('todos.ejs',{ "todotype" : "Completed Items" , "id" : "count-completed-items"
+                                , "todos" : CompletedTodos }) %>
         </div>
     </div>
 </body>
