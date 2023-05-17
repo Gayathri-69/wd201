@@ -31,7 +31,9 @@ module.exports = (sequelize, DataTypes) => {
     static async getCompleted(){
       return this.findAll({
         where:{
-          completed: true,
+          completed:{
+            [Op.eq]: false,
+          }
           },
           
       });
