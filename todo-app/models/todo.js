@@ -13,9 +13,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
     static addTodo({ title, dueDate }) {
+      if (!title) {
+        throw new Error("Title is required.");
+      }
+      if (!dueDate) {
+        throw new Error("Due date is required.");
+      }
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
-
+    setCompletionStatus(completed) {
+      return this.update({ completed: completed });
+    }
     static getTodos() {
       return this.findAll();
     }
@@ -25,8 +33,10 @@ module.exports = (sequelize, DataTypes) => {
         where:{
           completed:{
             [Op.eq]: true,
-          }
+          },
+          order: [["id", "ASC"]],
         }
+        
       })
     }
 
