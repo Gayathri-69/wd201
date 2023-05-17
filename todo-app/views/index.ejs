@@ -13,11 +13,12 @@
     .querySelector('meta[name="csrf-token"]')
     .getAttribute("content");
             function updateTodo(id) {
-            fetch(`/todos/${id}/markAsCompleted`, {
+            fetch(`/todos/${id}`, {
                 method: "put",
                 headers: { "Content-Type": "application/json" },
                 body:JSON.stringify({
-                    "_csrf": token
+                    _csrf: token,
+                    completed: !completed
                 })
             })
                 .then((res) => {
@@ -42,7 +43,7 @@
                 .catch((err) => console.error(err));
         }
     </script>
-    <title>TodoList</title>
+    <title>Todo-List</title>
 </head>
 
 <body>
@@ -58,7 +59,7 @@
                         </div>
                         <div class="flex-auto">
                             <input class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm leading-4"
-                                type="date" name="dueDate">
+                                type="date" name="dueDate" required>
                         </div>
                         <div class="flex-none">
                             <button class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2"
@@ -74,6 +75,9 @@
 
                         <%- include('todos.ejs',{ "todotype" : "Due Later" , "id" : "count-due-later" , "todos" :
                             dueLaterTodos }) %>
+                            
+                            <%- include('todos.ejs',{ "todotype" : "Completed Items" , "id"
+                                    : "count-completed-items" , "todos" : completedTodos }) %>
         </div>
     </div>
 </body>
