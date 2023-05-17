@@ -31,13 +31,10 @@ module.exports = (sequelize, DataTypes) => {
     static async getCompleted(){
       return this.findAll({
         where:{
-          completed:{
-            [Op.eq]: true,
+          completed: true,
           },
-          order: [["id", "ASC"]],
-        }
-        
-      })
+          
+      });
     }
 
     static getoverdueTodos() {
