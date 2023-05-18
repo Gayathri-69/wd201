@@ -11,9 +11,7 @@
     <% for (var i=0; i< todos.length; i++) { %>
         <li class="Todo-Item">
             <div class="flex items-center w-fit my-2 px-2 py-1 rounded hover:bg-purple-50">
-                <input class="w-4 h-4 text-blue-600 bg-gray-100 rounded border" type="checkbox" <%=todos[i].completed
-                    ? "checked" : "" %> onclick="updateTodo(<%= todos[i].id %>)"
-                    id="todo-checkbox-<%= todos[i].id%>">
+                  <input class="w-4 h-4 text-blue-600 bg-gray-100 rounded border" type="checkbox" <%= todos[i].completed ? "checked" : "" %> onclick="UpdateTodo(<%= todos[i].id %>,<%= todos[i].completed %>)" id="todo-checkbox-<%= todos[i].id%>">
                         <label for="todo-checkbox-<%= todos[i].id%>" class="ml-2 text-sm text-gray-600 cursor-pointer">
                             <%= todos[i].title %>
                         </label>
