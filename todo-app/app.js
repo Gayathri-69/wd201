@@ -4,14 +4,14 @@ const express = require("express");
 // eslint-disable-next-line no-unused-vars
 var csrf = require("tiny-csrf");
 const app = express();
-const { Todo } = require("./models");
+const { Todo ,User} = require("./models");
 const bodypaser = require("body-parser");
 var cookieParser = require("cookie-parser");
 app.use(bodypaser.json());
 const path = require("path");
 app.use(express.urlencoded({ extented: false }));
 app.use(cookieParser("shh! secret string"));
-app.use(csrf("123456789iamasecret987654321look", ["POST", "PUT", "DELETE"]));
+app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 
 
 
@@ -55,6 +55,25 @@ app.get("/todos", async (request, response) => {
     return response.status(422).json(error);
   }
 });
+
+app.get("/signup",(request,response)=>{
+  response.render("signup",{title:"Signup",csrfToken :request.csrfToken()})
+})
+app.post("/users",async (request,response)=>{
+  console.log("Firstname",request.body.firstName)
+  try {
+    const user=await User.create({
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      email: request.body.email,
+      password: request.body.password
+    });
+    response.redirect("/");
+  
+  }catch (error){
+    console.log(error);
+  }
+})
 
 app.post("/todos", async (request, response) => {
   console.log("creating a todo", request.body);
