@@ -15,14 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       })
       // define association here
     }
-    static addTodo({ title, dueDate }) {
+    static addTodo({ title, dueDate,userId }) {
       if (!title) {
         throw new Error("Title is required.");
       }
       if (!dueDate) {
         throw new Error("Due date is required.");
       }
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+      return this.create({ title: title, dueDate: dueDate, completed: false, userId });
     }
     setCompletionStatus(completed) {
       let r = completed;
@@ -32,52 +32,57 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll();
     }
 
-    static async getCompleted() {
+    static async getCompleted(userId) {
       return this.findAll({
         where: {
           completed: true,
+          userId
         },
       });
     }
 
-    static getoverdueTodos() {
+    static getoverdueTodos(userId) {
       let date = new Date().toISOString().split("T")[0];
       return this.findAll({
         where: {
           dueDate: {
             [Op.lt]: date,
           },
+          userId,
           completed: {
             [Op.eq]: false,
           },
         },
       });
     }
-    static getdueTodayTodos() {
+    static getdueTodayTodos(userId) {
       let date = new Date().toISOString().split("T")[0];
       return this.findAll({
         where: {
           dueDate: {
             [Op.eq]: date,
           },
+          userId,
           completed: false,
         },
       });
     }
-    static async remove(id) {
+    static async remove(id, userId) {
       return this.destroy({
         where: {
           id,
+          userId
         },
       });
     }
-    static getdueLaterTodos() {
+    static getdueLaterTodos(userId) {
       let date = new Date().toISOString().split("T")[0];
       return this.findAll({
         where: {
           dueDate: {
             [Op.gt]: date,
           },
+          userId,
           completed: false,
         },
       });
