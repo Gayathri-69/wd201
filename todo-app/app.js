@@ -109,7 +109,7 @@ app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response)
   }
 });
 
-app.get("/todos", async (request, response) => {
+app.get("/", async (request, response) => {
   console.log("Todo items", response.body);
   try {
     const todo = await Todo.findAll();
