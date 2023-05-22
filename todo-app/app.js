@@ -109,17 +109,6 @@ app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response)
   }
 });
 
-app.get("/", async (request, response) => {
-  console.log("Todo items", response.body);
-  try {
-    const todo = await Todo.findAll();
-    return response.send(todo);
-    // return response.json(todo);
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
 
 app.get("/signup",(request,response)=>{
   response.render("signup",{title:"Signup",csrfToken :request.csrfToken()})
