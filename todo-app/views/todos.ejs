@@ -80,6 +80,15 @@
 
                             <%- include('todo.ejs',{ "todotype" : "Completed Items" , "id" : "count-completed-items"
                                 , "todos" : CompletedTodos }) %>
+
+                                <% if(messages && messages.error && messages.error.length> 0) { %>
+                                    <% for(var i=0; i<messages.error.length; i++) { %>
+                                        <li>
+                                            <%= messages.error[i] %><br>
+                                        </li>
+                                        <% } %>
+                                            <% } %>
+                                
         </div>
     </div>
 </body>
