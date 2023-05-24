@@ -44,12 +44,13 @@ describe("Todo test suite", function () {
     const csrfToken = extractCsrfToken(res);
     res = await agent.post("/users").send({
       firstName:"domain",
-      lastName:" ",
+      lastName:"",
       email: "pqr@gmail.com",
       password: "123456",
       _csrf: csrfToken,
 
     });
+    expect(res.statusCode).toBe(302);
   });
     test("Sign out",async () =>{
       let res = await agent.get("/todos");
@@ -81,7 +82,7 @@ describe("Todo test suite", function () {
     let res = await agent.get("/todos");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
-      title: "complete homework",
+      title: "Buy milk",
       dueDate: new Date().toISOString(),
       completed: false,
       _csrf: csrfToken,
@@ -145,7 +146,6 @@ describe("Todo test suite", function () {
     const parsedUpdateResponse = JSON.parse(markIncompleteResponse.text);
     expect(parsedUpdateResponse.completed).toBe(false);
   });
-
   test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
     const agent = request.agent(server);
     await login(agent,"pqr@gmail.com","123456");
@@ -158,7 +158,7 @@ describe("Todo test suite", function () {
       _csrf: csrfToken,
     });
     const groupedTodosResponse = await agent.get("/todos")
-      .set("Accept", "applicatioon/json");
+      .set("Accept", "application/json");
     const ParsedGroupedResponse = JSON.parse(groupedTodosResponse.text);
     const dueTodaycount = ParsedGroupedResponse.dueTodayTodos.length;
     const latestTodo = ParsedGroupedResponse.dueTodayTodos[dueTodaycount - 1];
@@ -166,10 +166,10 @@ describe("Todo test suite", function () {
     res = await agent.get("/todos");
     csrfToken = extractCsrfToken(res);
 
-    const deleteTodo = await agent.delete(`/todos/${latestTodo}`);
+    const deleteTodo = await agent.delete(`/todos/${latestTodo.id}`).send({
+      _csrf: csrfToken,
+    });
 
-    expect(deleteTodo.statusCode).toBe(500);
-    const status = Boolean(deleteTodo.text);
-    expect(status).toBe(true);
+    expect(deleteTodo.statusCode).toBe(200);
   });
-});
+})
