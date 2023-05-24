@@ -131,10 +131,10 @@ app.post("/users",async (request,response)=>{
   const hashedPwd = await bcrypt.hash(request.body.password, saltRounds)
   console.log(hashedPwd);
   if (request.body.firstName.length == 0) {
-    request.flash("error", "First name can,t be empty!");
+    request.flash("error", "First name can't be empty!");
     return response.redirect("/signup");
   } else if (request.body.email.length == 0) {
-    request.flash("error", "E-mail cannot be empty!");
+    request.flash("error", "E-mail can't be empty!");
     return response.redirect("/signup");
   } else if (request.body.password.trim().length == 0) {
     request.flash("error", "Password required!");
