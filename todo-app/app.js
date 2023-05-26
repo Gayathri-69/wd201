@@ -129,13 +129,10 @@ app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response)
 
 
 
-app.get("/signup", async (request, response) => {
-  if (request.isAuthenticated()) {
-    return response.redirect("/todos");
-  }
+app.get("/signup", (request, response) => {
   response.render("signup", {
-    title: "signup",
-    csrfToken: request.csrfToken(),
+    title: "Signup",
+    csrfToken: request.csrfToken()
   });
 });
 app.post("/users",async (request,response)=>{
