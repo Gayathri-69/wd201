@@ -16,12 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
     static addTodo({ title, dueDate,userId }) {
-      if (!title) {
-        throw new Error("Title is required.");
-      }
-      if (!dueDate) {
-        throw new Error("Due date is required.");
-      }
       return this.create({ title: title, dueDate: dueDate, completed: false, userId });
     }
     setCompletionStatus(completed) {
@@ -38,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
           completed: true,
           userId
         },
+        order: [["id", "ASC"]],
       });
     }
 
@@ -53,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
             [Op.eq]: false,
           },
         },
+        order: [["id", "ASC"]],
       });
     }
     static getdueTodayTodos(userId) {
@@ -65,6 +61,7 @@ module.exports = (sequelize, DataTypes) => {
           userId,
           completed: false,
         },
+        order: [["id", "ASC"]],
       });
     }
     static async remove(id, userId) {
@@ -85,6 +82,7 @@ module.exports = (sequelize, DataTypes) => {
           userId,
           completed: false,
         },
+        order: [["id", "ASC"]],
       });
     }
   }
