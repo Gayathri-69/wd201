@@ -111,7 +111,6 @@ app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response)
   if (request.accepts("html")) {
     response.render("todos", {
      loggedInUser: request.user,
-     
       allTodos,
       overdueTodos,
       dueTodayTodos,
@@ -122,8 +121,8 @@ app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response)
   } else {
     response.json({
        userId: loggedInUser,
-      allTodos, overdueTodos, dueTodayTodos, dueLaterTodos, CompletedTodos,
-        csrfToken: request.csrfToken(),
+      allTodos, overdueTodos, dueTodayTodos, dueLaterTodos, CompletedTodos
+       
     });
   }
 });
