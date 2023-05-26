@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="csrf-token" content="<%= csrfToken %>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" rel="stylesheet">
     <script>
@@ -18,7 +18,7 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     _csrf: token,
-                    completed: status,
+                    completed: !completed
                 })
             })
                 .then((res) => {
@@ -44,33 +44,30 @@
                 .catch((err) => console.error(err));
         }
     </script>
-    <title>Todo-List</title>
+    <title>TodoList</title>
 </head>
 
 <body>
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
-            <%- include('header.ejs') %>
-               <div>                    
-                    <%= loggedInUser.firstName %>
-                    <%= loggedInUser.lastName %> <br>
+            <%- include('header.ejs') %><br>
+                <div>
+                    <%= "Welcome, " + loggedInUser.FirstName + " " + loggedInUser.LastName %>
                 </div>
-                <div class="gap-2 text-blue-600">
-                    <a href="/">Homepage</a>
-                    <a href="/signup">Sign Up</a>
-                    <a href="/login">Login</a>
-                </div>
-            <a href="/signout">Signout</a>
+                <br><a href="/" style="color: rgb(77, 141, 150); text-decoration: underline;">Home Page</a><br>
+                <a href="/signup" style="color: rgb(77, 141, 150); text-decoration: underline;">Sign up with a new
+                    account</a><br>
+                <a href="/login" style="color: rgb(77, 141, 150); text-decoration: underline;">Login</a><br>
                 <form action="/todos" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <div class="flex py-5 gap-2">
                         <div class="flex-auto">
                             <input class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm" type="text"
-                                name="title" placeholder="Enter Todo" required>
+                                name="title" placeholder="Enter Todo">
                         </div>
                         <div class="flex-auto">
                             <input class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm leading-4"
-                                type="date" name="dueDate" required>
+                                type="date" name="dueDate">
                         </div>
                         <div class="flex-none">
                             <button class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2"
@@ -78,28 +75,32 @@
                         </div>
                     </div>
                 </form>
+                <div>
+                    <%- include('todo.ejs',{ "todotype" : "Overdue" , "id" : "count-overdue" , "todos" : overdueTodos })
+                        %>
 
-                <%- include('todo.ejs',{ "todotype" : "Overdue" , "id" : "count-overdue" , "todos" : overdueTodos }) %>
+                        <%- include('todo.ejs',{ "todotype" : "Due Today" , "id" : "count-due-today" , "todos" :
+                            dueTodayTodos }) %>
 
-                    <%- include('todo.ejs',{ "todotype" : "Due Today" , "id" : "count-due-today" , "todos" :
-                        dueTodayTodos }) %>
+                            <%- include('todo.ejs',{ "todotype" : "Due Later" , "id" : "count-due-later" , "todos" :
+                                dueLaterTodos }) %>
 
-                        <%- include('todo.ejs',{ "todotype" : "Due Later" , "id" : "count-due-later" , "todos" :
-                            dueLaterTodos }) %>
+                                <%- include('todo.ejs',{ "todotype" : "Completed Items" , "id" : "count-completed-items"
+                                    , "todos" : completedTodos }) %>
 
-                            <%- include('todo.ejs',{ "todotype" : "Completed Items" , "id" : "count-completed-items"
-                                , "todos" : CompletedTodos }) %>
-
-                                <% if(messages && messages.error && messages.error.length> 0) { %>
-                                    <% for(var i=0; i<messages.error.length; i++) { %>
-                                        <li>
-                                            <%= messages.error[i] %><br>
-                                        </li>
-                                        <% } %>
+                                    <% if(messages && messages.error && messages.error.length> 0) { %>
+                                        <% for(var i=0; i<messages.error.length; i++) { %>
+                                            <li>
+                                                <%= messages.error[i] %><br>
+                                            </li>
                                             <% } %>
-                                
+                                                <% } %>
+                </div>
+                <br><a href="/signout" style="color: rgb(77, 141, 150); text-decoration: underline;"> Signout
+                    Account</a>
         </div>
     </div>
+
 </body>
 
 </html>
