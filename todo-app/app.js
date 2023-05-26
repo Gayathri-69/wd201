@@ -110,7 +110,7 @@ app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response)
   const CompletedTodos = await Todo.getCompleted(loggedInuser);
   if (request.accepts("html")) {
     response.render("todos", {
-     loggedInUser: request.user
+     loggedInUser: request.user,
       title:"Todo application",
       allTodos,
       overdueTodos,
@@ -249,7 +249,7 @@ app.post("/todos",connectEnsurelogin.ensureLoggedIn(), async (request, response)
     }
     
   }
-});
+);
 
 app.put("/todos/:id", connectEnsurelogin.ensureLoggedIn(), async (request, response) => {
   console.log("we have to update a todo with ID:", request.params.id);
