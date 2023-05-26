@@ -1,4 +1,4 @@
-* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const request = require("supertest");
 var cheerio = require("cheerio");
