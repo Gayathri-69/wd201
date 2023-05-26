@@ -7,6 +7,17 @@ const app = express();
 const bodypaser = require("body-parser");
 var cookieParser = require("cookie-parser");
 
+module.exports = {
+  "**/*.js": ["eslint --fix", "prettier --write"],
+};
+//set EJS as view engine
+app.set("view engine", "ejs");
+
+app.use(express.static(path.join(__dirname, "public")));
+
+const { Todo ,User, sequelize, Sequelize} = require("./models");
+
+
 const flash = require("connect-flash");
 const path = require("path");
 const passport = require('passport');
@@ -75,20 +86,6 @@ passport.deserializeUser((id,  done)=>{
   })
   
 });
-
-
-
-
-
-module.exports = {
-  "**/*.js": ["eslint --fix", "prettier --write"],
-};
-//set EJS as view engine
-app.set("view engine", "ejs");
-
-app.use(express.static(path.join(__dirname, "public")));
-
-const { Todo ,User, sequelize, Sequelize} = require("./models");
 
 app.get("/", async (request, response) => {
  
