@@ -102,12 +102,12 @@ app.get("/", async (request, response) => {
 
 
 app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response) => {
-  const loggedInuser = request.user.id;
-  const allTodos = await Todo.getTodos(loggedInuser);
-  const overdueTodos = await Todo.getoverdueTodos(loggedInuser);
-  const dueTodayTodos = await Todo.getdueTodayTodos(loggedInuser);
-  const dueLaterTodos = await Todo.getdueLaterTodos(loggedInuser);
-  const CompletedTodos = await Todo.getCompleted(loggedInuser);
+  const loggedInUser = request.user.id;
+  const allTodos = await Todo.getTodos(loggedInUser);
+  const overdueTodos = await Todo.getoverdueTodos(loggedInUser);
+  const dueTodayTodos = await Todo.getdueTodayTodos(loggedInUser);
+  const dueLaterTodos = await Todo.getdueLaterTodos(loggedInUser);
+  const CompletedTodos = await Todo.getCompleted(loggedInUser);
   if (request.accepts("html")) {
     response.render("todos", {
      loggedInUser: request.user,
