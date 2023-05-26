@@ -28,9 +28,7 @@ app.use(session({
   secret:"my-super-secret-key-8886142389",
   cookie:{
     maxAge:24*60*60*100
-  },
- resave: true,
-    saveUninitialized: true,
+  }
 })
 );
 
@@ -102,7 +100,7 @@ app.get("/", async (request, response) => {
 
 
 app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response) => {
-  const loggedInuser = request.user.id;
+  const loggedInUser = request.user.id;
   const allTodos = await Todo.getTodos(loggedInuser);
   const overdueTodos = await Todo.getoverdueTodos(loggedInuser);
   const dueTodayTodos = await Todo.getdueTodayTodos(loggedInuser);
@@ -131,9 +129,6 @@ app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response)
 
 
 app.get("/signup", async (request, response) => {
-  if (request.isAuthenticated()) {
-    return response.redirect("/todos");
-  }
   response.render("signup", {
     title: "signup",
     csrfToken: request.csrfToken(),
@@ -174,9 +169,6 @@ app.post("/users",async (request,response)=>{
 
 
 app.get("/login", (request, response) => {
-  if (request.isAuthenticated()) {
-    return response.redirect("/todos");
-  }
   response.render("login", { title: "Login", csrfToken: request.csrfToken() });
 });
 
@@ -198,26 +190,16 @@ app.post(
     response.redirect("/todos");
   }
 );
-app.get("/todo", async function (request, response) {
-  console.log("Processing list of all Todos ...");
-  try {
-    const todos = await Todo.findAll();
-    return response.send(todos);
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
 
 app.post("/todos",connectEnsurelogin.ensureLoggedIn(), async (request, response) => {
   console.log("creating a todo", request.body);
   console.log(request.user);
   if (!request.body.title) {
-    request.flash("error", "ADD TITLE TO YOUR TODO!");
+    request.flash("error", "Give a title!");
     return response.redirect("/todos");
   }
   if (!request.body.dueDate) {
-    request.flash("error", "TODO ITEM MUST CONTAIN DATE!");
+    request.flash("error", "Give a date to your todo!");
     return response.redirect("/todos");
   }
   try {
@@ -230,24 +212,9 @@ app.post("/todos",connectEnsurelogin.ensureLoggedIn(), async (request, response)
     });
     return response.redirect("/todos");
   } catch (error) {
-    if (error instanceof Sequelize.ValidationError) {
-        const error_messsage = error.errors.map((err) => err.message);
-        console.log(error_messsage);
-        error_messsage.forEach((seq_error) => {
-          if (seq_error == "Validition len on title failed") {
-            request.flash("error", "Todo cannot be empty!");
-          }
-          if (seq_error == "Validation isDate on dueDate failed") {
-            request.flash("error", "Date cannot be empty!");
-          }
-        });
-        response.redirect("/todos");
-      } else {
         console.log(error);
         return response.status(422).json(error);
       }
-    }
-    
   }
 );
 
@@ -264,10 +231,7 @@ app.put("/todos/:id", connectEnsurelogin.ensureLoggedIn(), async (request, respo
   }
 });
 // eslint-disable-line no-unused-vars
-app.delete(
-  "/todos/:id",
-  connectEnsurelogin.ensureLoggedIn(),
-  async (request, response) => {
+app.delete("/todos/:id",connectEnsurelogin.ensureLoggedIn(),async (request, response) => {
     console.log("Delete a todo by ID: ", request.params.id);
     const loggedInUser = request.user.id;
     try {
