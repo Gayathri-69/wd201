@@ -17,7 +17,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(flash());
 
 module.exports = {
-  "**/*.js": ["eslint --fix", "prettier --write"],
+  "*/.js": ["eslint --fix", "prettier --write"],
 };
 
 app.use(bodyPaser.json());
@@ -48,7 +48,7 @@ passport.use(new LocalStrategy({
 }, (username, password, done) => {
   User.findOne({
     where: {
-      Email: username
+      email: username
     }
   })
     .then(async (user) => {
@@ -92,7 +92,7 @@ app.get("/todos", connectEnsureLogin.ensureLoggedIn(), async (request, response)
   const overdueTodos = await Todo.getoverdueTodos(loggedInUser);
   const dueTodayTodos = await Todo.getdueTodayTodos(loggedInUser);
   const dueLaterTodos = await Todo.getdueLaterTodos(loggedInUser);
-  const CompletedTodos = await Todo.getCompletedTodos(loggedInUser);
+  const CompletedTodos = await Todo.getCompleted(loggedInUser);
   if (request.accepts("html")) {
     response.render("todos", {
       loggedInUser: request.user,
@@ -132,14 +132,14 @@ app.post("/users", async (request, response) => {
     request.flash("error", "PASSWORD IS MANDATORY!");
     return response.redirect("/signup");
   }
-  const hashedPwd = await bcrypt.hash(request.body.Password, saltRounds);
+  const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
   console.log(hashedPwd);
   try {
     const user = await User.create({
-      FirstName: request.body.FirstName,
-      LastName: request.body.LastName,
-      Email: request.body.Email,
-      Password: hashedPwd
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      email: request.body.email,
+      password: hashedPwd
     });
     request.login(user, (err) => {
       if (err) {
