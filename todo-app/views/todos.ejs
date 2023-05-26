@@ -18,7 +18,7 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     _csrf: token,
-                    completed: !completed
+                    completed: status,
                 })
             })
                 .then((res) => {
@@ -51,7 +51,15 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
-              
+               <div>                    
+                    <%= loggedInUser.firstName %>
+                    <%= loggedInUser.lastName %> <br>
+                </div>
+                <div class="gap-2 text-blue-600">
+                    <a href="/">Homepage</a>
+                    <a href="/signup">Sign Up</a>
+                    <a href="/login">Login</a>
+                </div>
             <a href="/signout">Signout</a>
                 <form action="/todos" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
