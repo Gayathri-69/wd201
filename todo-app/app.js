@@ -111,7 +111,7 @@ app.get("/todos", connectEnsurelogin.ensureLoggedIn(), async (request, response)
   if (request.accepts("html")) {
     response.render("todos", {
      loggedInUser: request.user,
-      title:"Todo application",
+     
       allTodos,
       overdueTodos,
       dueTodayTodos,
